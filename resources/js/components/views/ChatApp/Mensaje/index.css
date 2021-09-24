@@ -1,0 +1,25 @@
+.mensaje-wrapper {
+  display: flex;
+}
+
+.mensaje {
+  padding: 10px 20px;
+  border-radius: 10px;
+  margin-top: 6px;
+}
+
+.alinear-izquierda {
+  justify-content: left;
+}
+
+.alinear-derecha {
+  justify-content: right;
+}
+
+.mensaje-propio {
+  background-color: red;
+}
+
+.mensaje-ajeno {
+  background-color: blue;
+}

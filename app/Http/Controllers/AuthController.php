@@ -9,6 +9,10 @@ use Illuminate\Support\Facades\Validator;
 
 class AuthController extends Controller
 {
+  public function me() {
+    return Auth::check() ? Auth::user() : '{}';
+  }
+
   public function register(Request $request) {
     // Reglas de validación para crear un usuario
 		$reglas = [

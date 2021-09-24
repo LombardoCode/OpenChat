@@ -1,0 +1,6 @@
+.contacto-hover:hover {
+  background-color: #3753ac;
+  color: #ffffff;
+  transition-property: all;
+  transition-duration: 200ms;
+}
