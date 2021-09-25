@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ChatAppController;
+use App\Http\Controllers\MensajeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,6 +31,7 @@ Route::prefix('api')->group(function() {
   });
 
   Route::prefix('mensajes')->group(function() {
+    Route::post('/', [MensajeController::class, 'store']);
     Route::get('/{contacto_id}', [ChatAppController::class, 'obtener_mensajes']);
   });
 });

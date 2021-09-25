@@ -7,5 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 
 class Mensaje extends Model
 {
-    use HasFactory;
+  use HasFactory;
+  protected $fillable = ["de", "para", "mensaje"];
 }

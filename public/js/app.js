@@ -2317,6 +2317,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-dom */ "./node_modules/react-dom/index.js");
 /* harmony import */ var _Mensaje_Mensaje__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../Mensaje/Mensaje */ "./resources/js/components/views/ChatApp/Mensaje/Mensaje.js");
 /* harmony import */ var react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! react/jsx-runtime */ "./node_modules/react/jsx-runtime.js");
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -2338,46 +2346,96 @@ function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function Conversacion(props) {
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)([]),
       _useState2 = _slicedToArray(_useState, 2),
-      mensajes = _useState2[0],
-      setMensajes = _useState2[1];
+      conversacion = _useState2[0],
+      setConversacion = _useState2[1];
+
+  var _useState3 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
+      _useState4 = _slicedToArray(_useState3, 2),
+      mensaje = _useState4[0],
+      setMensaje = _useState4[1];
+
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(document.querySelector('meta[name="csrf-token"]').getAttribute('content')),
+      _useState6 = _slicedToArray(_useState5, 2),
+      token = _useState6[0],
+      setToken = _useState6[1];
 
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     if (props.contacto.id) {
-      setMensajes([]);
+      setConversacion([]);
       axios.get('/api/mensajes/' + props.contacto.id).then(function (res) {
         console.log(res.data.mensajes);
-        setMensajes(res.data.mensajes);
+        setConversacion(res.data.mensajes);
       })["catch"](function (err) {
         console.log(err);
       });
     }
   }, [props.contacto]);
-  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+
+  function enviarMensaje(e) {
+    e.preventDefault();
+    axios.post('/api/mensajes', {
+      contacto: props.contacto,
+      mensaje: mensaje
+    }).then(function (res) {
+      console.log(res.data);
+
+      if (res.data.success) {
+        setConversacion([].concat(_toConsumableArray(conversacion), [res.data.mensaje]));
+        console.log(conversacion);
+      }
+    })["catch"](function (err) {
+      console.log(err);
+    });
+  }
+
+  return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
     className: "col-9 bg-success px-0",
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      id: "header",
-      className: "w-full bg-primary px-3 py-2 text-white",
-      children: props.contacto.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+    children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+      className: "d-flex flex-column h-100",
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        id: "header",
+        className: "w-full bg-primary px-3 py-2 text-white",
+        children: props.contacto.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)(react__WEBPACK_IMPORTED_MODULE_0__.Fragment, {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+            className: "mb-0",
+            children: props.contacto.name
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
+            className: "mb-0",
+            children: props.contacto.email
+          })]
+        }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
           className: "mb-0",
-          children: props.contacto.name
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
-          className: "mb-0",
-          children: props.contacto.email
+          children: "Selecciona un contacto"
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
+        id: "conversacion",
+        children: Object.keys(conversacion).map(function (key) {
+          return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Mensaje_Mensaje__WEBPACK_IMPORTED_MODULE_2__["default"], {
+            mensaje: conversacion[key],
+            usuario: props.contacto
+          }, conversacion[key].id);
+        })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("form", {
+        className: "d-flex mt-auto w-full px-2 pb-1",
+        onSubmit: enviarMensaje,
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+          type: "hidden",
+          name: "_token",
+          value: token
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+          type: "text",
+          className: "form-control mr-1",
+          placeholder: "Ingrese su mensaje",
+          onChange: function onChange(e) {
+            return setMensaje(e.target.value);
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+          type: "submit",
+          className: "btn btn-primary",
+          value: "Enviar"
         })]
-      }) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("p", {
-        className: "mb-0",
-        children: "Selecciona un contacto"
-      })
-    }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      id: "mensajes",
-      children: Object.keys(mensajes).map(function (key) {
-        return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)(_Mensaje_Mensaje__WEBPACK_IMPORTED_MODULE_2__["default"], {
-          mensaje: mensajes[key],
-          usuario: props.contacto
-        }, mensajes[key].id);
-      })
-    })]
+      })]
+    })
   });
 }
 
