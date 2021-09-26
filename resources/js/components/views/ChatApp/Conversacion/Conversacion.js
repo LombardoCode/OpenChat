@@ -2,38 +2,20 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import Mensaje from '../Mensaje/Mensaje';
 
-function Conversacion(props) {
-  const [conversacion, setConversacion] = useState([]);
+function Conversacion({ usuario, contacto, conversacion, agregarMensaje }) {
   const [mensaje, setMensaje] = useState('');
   let [token, setToken] = useState(document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-
-  useEffect(() => {
-    if (props.contacto.id ) {
-      setConversacion([]);
-
-      axios.get('/api/mensajes/' + props.contacto.id)
-      .then(res => {
-        console.log(res.data.mensajes);
-        setConversacion(res.data.mensajes);
-      })
-      .catch(err => {
-        console.log(err);
-      })
-    }
-  }, [props.contacto]);
 
   function enviarMensaje(e) {
     e.preventDefault();
 
     axios.post('/api/mensajes', {
-      contacto: props.contacto,
+      contacto: contacto,
       mensaje: mensaje
     })
     .then(res => {
-      console.log(res.data);
       if (res.data.success) {
-        setConversacion([...conversacion, res.data.mensaje]);
-        console.log(conversacion)
+        agregarMensaje(res.data.mensaje);
       }
     })
     .catch(err => {
@@ -45,11 +27,11 @@ function Conversacion(props) {
     <div className="col-9 bg-success px-0">
       <div className="d-flex flex-column h-100">
         <div id="header" className="w-full bg-primary px-3 py-2 text-white">
-          {props.contacto.id
+          {contacto.id
           ? (
             <React.Fragment>
-              <p className="mb-0">{props.contacto.name}</p>
-              <p className="mb-0">{props.contacto.email}</p>
+              <p className="mb-0">{contacto.name}</p>
+              <p className="mb-0">{contacto.email}</p>
             </React.Fragment>
           )
           : (
@@ -59,7 +41,7 @@ function Conversacion(props) {
         <div id="conversacion">
           {Object.keys(conversacion).map(function(key) {
               return (
-                <Mensaje mensaje={conversacion[key]} key={conversacion[key].id} usuario={props.contacto}></Mensaje>
+                <Mensaje mensaje={conversacion[key]} key={conversacion[key].id} usuario={contacto}></Mensaje>
               )
           })}
         </div>

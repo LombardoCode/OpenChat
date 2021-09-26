@@ -1,16 +1,54 @@
-import React, { useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import Conversacion from './Conversacion/Conversacion';
 import ListaDeContactos from './ListaDeContactos/ListaDeContactos';
 
 function ChatApp(props) {
   let [contacto, setContacto] = useState({});
+  let [conversacion, setConversacion] = useState([]);
+
+  useEffect(() => {
+    // Conectamos al usuario a su propio canal privado de mensajes
+    Echo.private('mensajes.' + props.usuario.id)
+    .listen('EnviarMensaje', (e) => {
+      handleAgregarMensaje(e.mensaje)
+    })
+  }, []);
+
+  const cambiarContacto = (contacto_nuevo) => {
+    // Cambiamos el contacto
+    setContacto(contacto_nuevo);
+
+    // Obtenemos los últimos mensajes con el contacto seleccionado
+    axios.get('/api/mensajes/' + contacto_nuevo.id)
+    .then(res => {
+      setConversacion(res.data.mensajes);
+    })
+    .catch(err => {
+      console.log(err);
+    })
+  }
+
+  const handleAgregarMensaje = (mensaje_nuevo) => {
+    // Agregamos el nuevo mensaje
+    setConversacion((prevState) => [
+      ...prevState,
+      mensaje_nuevo
+    ]);
+  }
 
   return (
     <div className="container">
       <div className="row">
-        <Conversacion usuario={props.usuario} contacto={contacto}></Conversacion>
-        <ListaDeContactos setConversacion={(contacto) => setContacto(contacto)}></ListaDeContactos>
+        <Conversacion
+          usuario={props.usuario}
+          contacto={contacto}
+          conversacion={conversacion}
+          agregarMensaje={(mensaje_nuevo) => handleAgregarMensaje(mensaje_nuevo)}
+        ></Conversacion>
+        <ListaDeContactos
+          setConversacion={(contacto_nuevo) => cambiarContacto(contacto_nuevo)}
+        ></ListaDeContactos>
       </div>
     </div>
   );
