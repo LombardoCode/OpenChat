@@ -1,0 +1,57 @@
+.fnt-quicksand {
+  font-family: 'Quicksand', 'Arial', sans-serif;
+}
+
+.fondo {
+  height: 100%;
+}
+
+.text-xl {
+  font-size: 1.4rem;
+}
+
+.text-2xl {
+  font-size: 1.8rem;
+}
+
+.text-4xl {
+  font-size: 3rem;
+}
+
+.justify-center {
+  justify-content: center;
+}
+
+.bordes-botones {
+  border: 3px solid #ffffff;
+  border-radius: 10px;
+}
+
+.padding-top-bottom {
+  padding-top: 1.2rem;
+  padding-bottom: 1.2rem;
+}
+
+.hover-boton:hover {
+  background-color: #ffffff;
+  color: #000000;
+}
+
+.transition-all {
+  transition-property: all;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 200ms;
+}
+
+
+@media (min-width: 768px) {
+  .padding-top-bottom {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+  }
+
+  .margin-derecha {
+    margin-right: 22px;
+  }
+}
+

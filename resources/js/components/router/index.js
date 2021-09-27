@@ -5,6 +5,7 @@ import Navbar from '../views/Navbar'
 import Registrarse from '../views/Registrarse'
 import Login from '../views/Login'
 import ChatApp from '../views/ChatApp/ChatApp'
+import Acerca from '../views/Acerca/Acerca'
 
 function Router(props) {
   return (
@@ -18,6 +19,7 @@ function Router(props) {
             }} />
             <Route exact path='/registrarse' component={Registrarse} />
             <Route exact path='/login' component={Login} />
+            <Route exact path='/acerca' component={Acerca} />
           </Switch>
         </div>
       </div>

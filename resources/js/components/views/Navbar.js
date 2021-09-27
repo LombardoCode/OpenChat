@@ -21,7 +21,7 @@ function Navbar(props) {
                   {props.usuario.name}
                 </a>
                 <div className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <Link className='dropdown-item' to='/cuenta'>Mi cuenta</Link>
+                  <Link className='dropdown-item' to='/acerca'>Acerca de</Link>
                   <form action="/api/auth/logout" method="POST">
                     <input type="hidden" name="_token" value={token} />
                     <input type="submit" className='dropdown-item' value="Cerrar sesión" />
@@ -36,6 +36,9 @@ function Navbar(props) {
                 </li>
                 <li className="nav-item">
                   <Link className='nav-link' to='/registrarse'>Registrarse</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className='nav-link' to='/acerca'>Acerca de</Link>
                 </li>
               </React.Fragment>
             )}
