@@ -16,7 +16,7 @@ function ListaDeContactos(props) {
   }, []);
 
   return (
-    <div id="lista-de-contactos" className="col-3 bg-info p-0">
+    <div id="lista-de-contactos" className="col-3 bg-white p-0">
       {contactos.map(contacto => {
         return (
           <div key={contacto.id} className="contacto py-2 px-3 contacto-hover cursor-pointer" onClick={() => props.setConversacion(contacto)}>

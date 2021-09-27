@@ -2459,7 +2459,10 @@ function Conversacion(_ref) {
   }
 
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)("div", {
-    className: "col-9 bg-success px-0 overflow-auto altura",
+    className: "col-9 px-0 overflow-auto altura",
+    style: {
+      backgroundColor: '#d1d1d1'
+    },
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
       className: "d-flex flex-column space-between position-relative w-100 h-100 space-between",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsxs)("div", {
@@ -2576,7 +2579,7 @@ function ListaDeContactos(props) {
   }, []);
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
     id: "lista-de-contactos",
-    className: "col-3 bg-info p-0",
+    className: "col-3 bg-white p-0",
     children: contactos.map(function (contacto) {
       return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
         className: "contacto py-2 px-3 contacto-hover cursor-pointer",
@@ -2623,7 +2626,7 @@ function Mensaje(props) {
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
     className: "mensaje-wrapper ".concat(props.mensaje.de == props.usuario.id ? 'alinear-izquierda' : 'alinear-derecha'),
     children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("div", {
-      className: "mensaje ".concat(props.mensaje.de == props.usuario.id ? 'bg-secondary' : 'bg-primary'),
+      className: "mensaje ".concat(props.mensaje.de == props.usuario.id ? 'mensaje-ajeno' : 'mensaje-propio'),
       children: props.mensaje.mensaje
     })
   });
@@ -7488,7 +7491,7 @@ __webpack_require__.r(__webpack_exports__);
 
 var ___CSS_LOADER_EXPORT___ = _node_modules_css_loader_dist_runtime_api_js__WEBPACK_IMPORTED_MODULE_0___default()(function(i){return i[1]});
 // Module
-___CSS_LOADER_EXPORT___.push([module.id, ".mensaje-wrapper {\n  display: flex;\n}\n\n.mensaje {\n  padding: 10px 20px;\n  border-radius: 10px;\n  margin-top: 6px;\n}\n\n.alinear-izquierda {\n  justify-content: left;\n}\n\n.alinear-derecha {\n  justify-content: right;\n}\n\n.mensaje-propio {\n  background-color: red;\n}\n\n.mensaje-ajeno {\n  background-color: blue;\n}\n", ""]);
+___CSS_LOADER_EXPORT___.push([module.id, ".mensaje-wrapper {\n  display: flex;\n}\n\n.mensaje {\n  padding: 10px 20px;\n  border-radius: 10px;\n  margin-top: 6px;\n}\n\n.alinear-izquierda {\n  justify-content: left;\n}\n\n.alinear-derecha {\n  justify-content: right;\n}\n\n.mensaje-propio {\n  background-color: rgb(53, 151, 196);\n  color: #ffffff;\n}\n\n.mensaje-ajeno {\n  background-color: rgb(167, 167, 167);\n}\n", ""]);
 // Exports
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (___CSS_LOADER_EXPORT___);
 

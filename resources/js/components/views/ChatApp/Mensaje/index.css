@@ -17,9 +17,10 @@
 }
 
 .mensaje-propio {
-  background-color: red;
+  background-color: rgb(53, 151, 196);
+  color: #ffffff;
 }
 
 .mensaje-ajeno {
-  background-color: blue;
+  background-color: rgb(167, 167, 167);
 }

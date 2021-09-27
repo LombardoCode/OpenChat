@@ -58,7 +58,7 @@ function Conversacion({ usuario, contacto, conversacion, agregarMensaje, escribi
   }
 
   return (
-    <div className="col-9 bg-success px-0 overflow-auto altura">
+    <div className="col-9 px-0 overflow-auto altura" style={{backgroundColor: '#d1d1d1'}}>
       <div className="d-flex flex-column space-between position-relative w-100 h-100 space-between">
         <div id="header-y-conversacion">
           {contacto.id
