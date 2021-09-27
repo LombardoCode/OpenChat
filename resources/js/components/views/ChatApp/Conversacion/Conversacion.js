@@ -2,9 +2,31 @@ import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import Mensaje from '../Mensaje/Mensaje';
 
-function Conversacion({ usuario, contacto, conversacion, agregarMensaje }) {
+function Conversacion({ usuario, contacto, conversacion, agregarMensaje, escribiendo }) {
   const [mensaje, setMensaje] = useState('');
-  let [token, setToken] = useState(document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+  const [token, setToken] = useState(document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+
+  function handleEscribiendo(e) {
+    let mensaje = e.target.value;
+    setMensaje(mensaje)
+
+    // Identificamos si el usuario está escribiendo un mensaje para mandarlo mediante websockets
+    if (mensaje.length > 0) {
+      Echo.private('mensajes.' + contacto.id)
+      .whisper('typing', {
+        nombre: usuario.name,
+        escribiendo: true,
+        mensaje
+      })
+    } else {
+      Echo.private('mensajes.' + contacto.id)
+      .whisper('typing', {
+        nombre: null,
+        escribiendo: false,
+        mensaje
+      })
+    }
+  }
 
   function enviarMensaje(e) {
     e.preventDefault();
@@ -15,7 +37,18 @@ function Conversacion({ usuario, contacto, conversacion, agregarMensaje }) {
     })
     .then(res => {
       if (res.data.success) {
+        // Agregamos el mensaje a la conversación
         agregarMensaje(res.data.mensaje);
+
+        // Limpiamos el input del mensaje y dejamos de alertar al otro usuario que no estamos escribiendo un mensaje
+        setMensaje('');
+
+        Echo.private('mensajes.' + contacto.id)
+        .whisper('typing', {
+          nombre: null,
+          escribiendo: false,
+          mensaje
+        })
       }
     })
     .catch(err => {
@@ -45,11 +78,22 @@ function Conversacion({ usuario, contacto, conversacion, agregarMensaje }) {
               )
           })}
         </div>
-        <form className="d-flex mt-auto w-full px-2 pb-1" onSubmit={enviarMensaje}>
-          <input type="hidden" name="_token" value={token}></input>
-          <input type="text" className="form-control mr-1" placeholder="Ingrese su mensaje" onChange={(e) => setMensaje(e.target.value)} />
-          <input type="submit" className="btn btn-primary" value="Enviar" />
-        </form>
+        {contacto.id
+          ? (
+            <div className="mt-auto">
+              {escribiendo.escribiendo
+              ? (
+                <p className="m-0">{escribiendo.nombre} está escribiendo...</p>
+              )
+              : (null)}
+              <form className="d-flex w-full px-2 pb-1" onSubmit={enviarMensaje}>
+                <input type="hidden" name="_token" value={token}></input>
+                <input type="text" className="form-control mr-1" placeholder="Ingrese su mensaje" value={mensaje} onChange={(e) => handleEscribiendo(e)} />
+                <input type="submit" className="btn btn-primary" value="Enviar" />
+              </form>
+            </div>
+          )
+          : (null)}
       </div>
     </div>
   );

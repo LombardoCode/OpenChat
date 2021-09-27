@@ -1,5 +1,6 @@
 <?php
 
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Broadcast;
 
 /*
@@ -14,6 +15,6 @@ use Illuminate\Support\Facades\Broadcast;
 */
 
 Broadcast::channel('mensajes.{id}', function ($user, $id) {
-  return (int) $user->id === (int) $id;
-  //dd((int) $user->id, (int) $id);
+  //return (int) $user->id === (int) $id;
+  return Auth::check();
 });

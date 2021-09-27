@@ -6,12 +6,19 @@ import ListaDeContactos from './ListaDeContactos/ListaDeContactos';
 function ChatApp(props) {
   let [contacto, setContacto] = useState({});
   let [conversacion, setConversacion] = useState([]);
+  const [escribiendo, setEscribiendo] = useState({});
 
   useEffect(() => {
     // Conectamos al usuario a su propio canal privado de mensajes
+    console.log(props.usuario.id)
     Echo.private('mensajes.' + props.usuario.id)
     .listen('EnviarMensaje', (e) => {
       handleAgregarMensaje(e.mensaje)
+    })
+    .listenForWhisper('typing', (e) => {
+      console.log('Typing');
+      console.log(e);
+      setEscribiendo(e)
     })
   }, []);
 
@@ -45,6 +52,7 @@ function ChatApp(props) {
           contacto={contacto}
           conversacion={conversacion}
           agregarMensaje={(mensaje_nuevo) => handleAgregarMensaje(mensaje_nuevo)}
+          escribiendo={escribiendo}
         ></Conversacion>
         <ListaDeContactos
           setConversacion={(contacto_nuevo) => cambiarContacto(contacto_nuevo)}

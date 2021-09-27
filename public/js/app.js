@@ -2300,10 +2300,20 @@ function ChatApp(props) {
       conversacion = _useState4[0],
       setConversacion = _useState4[1];
 
+  var _useState5 = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)({}),
+      _useState6 = _slicedToArray(_useState5, 2),
+      escribiendo = _useState6[0],
+      setEscribiendo = _useState6[1];
+
   (0,react__WEBPACK_IMPORTED_MODULE_0__.useEffect)(function () {
     // Conectamos al usuario a su propio canal privado de mensajes
+    console.log(props.usuario.id);
     Echo["private"]('mensajes.' + props.usuario.id).listen('EnviarMensaje', function (e) {
       handleAgregarMensaje(e.mensaje);
+    }).listenForWhisper('typing', function (e) {
+      console.log('Typing');
+      console.log(e);
+      setEscribiendo(e);
     });
   }, []);
 
@@ -2335,7 +2345,8 @@ function ChatApp(props) {
         conversacion: conversacion,
         agregarMensaje: function agregarMensaje(mensaje_nuevo) {
           return handleAgregarMensaje(mensaje_nuevo);
-        }
+        },
+        escribiendo: escribiendo
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_4__.jsx)(_ListaDeContactos_ListaDeContactos__WEBPACK_IMPORTED_MODULE_3__["default"], {
         setConversacion: function setConversacion(contacto_nuevo) {
           return cambiarContacto(contacto_nuevo);
@@ -2386,7 +2397,8 @@ function Conversacion(_ref) {
   var usuario = _ref.usuario,
       contacto = _ref.contacto,
       conversacion = _ref.conversacion,
-      agregarMensaje = _ref.agregarMensaje;
+      agregarMensaje = _ref.agregarMensaje,
+      escribiendo = _ref.escribiendo;
 
   var _useState = (0,react__WEBPACK_IMPORTED_MODULE_0__.useState)(''),
       _useState2 = _slicedToArray(_useState, 2),
@@ -2398,6 +2410,25 @@ function Conversacion(_ref) {
       token = _useState4[0],
       setToken = _useState4[1];
 
+  function handleEscribiendo(e) {
+    var mensaje = e.target.value;
+    setMensaje(mensaje); // Identificamos si el usuario está escribiendo un mensaje para mandarlo mediante websockets
+
+    if (mensaje.length > 0) {
+      Echo["private"]('mensajes.' + contacto.id).whisper('typing', {
+        nombre: usuario.name,
+        escribiendo: true,
+        mensaje: mensaje
+      });
+    } else {
+      Echo["private"]('mensajes.' + contacto.id).whisper('typing', {
+        nombre: null,
+        escribiendo: false,
+        mensaje: mensaje
+      });
+    }
+  }
+
   function enviarMensaje(e) {
     e.preventDefault();
     axios.post('/api/mensajes', {
@@ -2405,7 +2436,15 @@ function Conversacion(_ref) {
       mensaje: mensaje
     }).then(function (res) {
       if (res.data.success) {
-        agregarMensaje(res.data.mensaje);
+        // Agregamos el mensaje a la conversación
+        agregarMensaje(res.data.mensaje); // Limpiamos el input del mensaje y dejamos de alertar al otro usuario que no estamos escribiendo un mensaje
+
+        setMensaje('');
+        Echo["private"]('mensajes.' + contacto.id).whisper('typing', {
+          nombre: null,
+          escribiendo: false,
+          mensaje: mensaje
+        });
       }
     })["catch"](function (err) {
       console.log(err);
@@ -2439,26 +2478,33 @@ function Conversacion(_ref) {
             usuario: contacto
           }, conversacion[key].id);
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("form", {
-        className: "d-flex mt-auto w-full px-2 pb-1",
-        onSubmit: enviarMensaje,
-        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-          type: "hidden",
-          name: "_token",
-          value: token
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-          type: "text",
-          className: "form-control mr-1",
-          placeholder: "Ingrese su mensaje",
-          onChange: function onChange(e) {
-            return setMensaje(e.target.value);
-          }
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
-          type: "submit",
-          className: "btn btn-primary",
-          value: "Enviar"
+      }), contacto.id ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("div", {
+        className: "mt-auto",
+        children: [escribiendo.escribiendo ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("p", {
+          className: "m-0",
+          children: [escribiendo.nombre, " est\xE1 escribiendo..."]
+        }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsxs)("form", {
+          className: "d-flex w-full px-2 pb-1",
+          onSubmit: enviarMensaje,
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            type: "hidden",
+            name: "_token",
+            value: token
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            type: "text",
+            className: "form-control mr-1",
+            placeholder: "Ingrese su mensaje",
+            value: mensaje,
+            onChange: function onChange(e) {
+              return handleEscribiendo(e);
+            }
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_3__.jsx)("input", {
+            type: "submit",
+            className: "btn btn-primary",
+            value: "Enviar"
+          })]
         })]
-      })]
+      }) : null]
     })
   });
 }
