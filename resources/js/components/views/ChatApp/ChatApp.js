@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import ReactDOM from 'react-dom'
 import Conversacion from './Conversacion/Conversacion';
 import ListaDeContactos from './ListaDeContactos/ListaDeContactos';
+import './index.css'
 
 function ChatApp(props) {
   let [contacto, setContacto] = useState({});
@@ -45,18 +46,20 @@ function ChatApp(props) {
   }
 
   return (
-    <div className="container">
-      <div className="row">
-        <Conversacion
-          usuario={props.usuario}
-          contacto={contacto}
-          conversacion={conversacion}
-          agregarMensaje={(mensaje_nuevo) => handleAgregarMensaje(mensaje_nuevo)}
-          escribiendo={escribiendo}
-        ></Conversacion>
-        <ListaDeContactos
-          setConversacion={(contacto_nuevo) => cambiarContacto(contacto_nuevo)}
-        ></ListaDeContactos>
+    <div className="fondo">
+      <div className="container altura-chatbox py-3">
+        <div className="row rounded-lg overflow-y chatapp-container">
+          <ListaDeContactos
+            setConversacion={(contacto_nuevo) => cambiarContacto(contacto_nuevo)}
+          ></ListaDeContactos>
+          <Conversacion
+            usuario={props.usuario}
+            contacto={contacto}
+            conversacion={conversacion}
+            agregarMensaje={(mensaje_nuevo) => handleAgregarMensaje(mensaje_nuevo)}
+            escribiendo={escribiendo}
+          ></Conversacion>
+        </div>
       </div>
     </div>
   );

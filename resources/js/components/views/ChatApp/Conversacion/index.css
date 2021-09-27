@@ -1,0 +1,22 @@
+.altura {
+  height: 100%;
+}
+
+.altura::-webkit-scrollbar {
+  display: none;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.escribiendo {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
+#conversacion {
+  margin-bottom: 60px;
+}

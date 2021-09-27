@@ -16,10 +16,10 @@ function ListaDeContactos(props) {
   }, []);
 
   return (
-    <div className="col-3 bg-info p-0">
+    <div id="lista-de-contactos" className="col-3 bg-info p-0">
       {contactos.map(contacto => {
         return (
-          <div key={contacto.id} className="py-2 px-3 contacto-hover cursor-pointer" onClick={() => props.setConversacion(contacto)}>
+          <div key={contacto.id} className="contacto py-2 px-3 contacto-hover cursor-pointer" onClick={() => props.setConversacion(contacto)}>
             <p className="mb-0">{contacto.name}</p>
             <p className="mb-0">{contacto.email}</p>
           </div>

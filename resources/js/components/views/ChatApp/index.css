@@ -1,0 +1,21 @@
+.fondo {
+  background-image: linear-gradient(to right bottom, #1658bc, #1753ac, #194e9c, #1d498c, #20447c);
+  height: 100%;
+}
+
+.altura-chatbox {
+  height: 100%;
+  max-height: 800px;
+}
+
+.chatapp-container {
+  overflow: hidden;
+  height: 100%;
+}
+
+.chatapp-container::-webkit-scrollbar {
+  display: none;
+}
+
+
+

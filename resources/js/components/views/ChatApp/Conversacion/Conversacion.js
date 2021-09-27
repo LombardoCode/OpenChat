@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import Mensaje from '../Mensaje/Mensaje';
+import './index.css'
 
 function Conversacion({ usuario, contacto, conversacion, agregarMensaje, escribiendo }) {
   const [mensaje, setMensaje] = useState('');
@@ -57,43 +58,44 @@ function Conversacion({ usuario, contacto, conversacion, agregarMensaje, escribi
   }
 
   return (
-    <div className="col-9 bg-success px-0">
-      <div className="d-flex flex-column h-100">
-        <div id="header" className="w-full bg-primary px-3 py-2 text-white">
+    <div className="col-9 bg-success px-0 overflow-auto altura">
+      <div className="d-flex flex-column space-between position-relative w-100 h-100 space-between">
+        <div id="header-y-conversacion">
           {contacto.id
           ? (
-            <React.Fragment>
+            <div className="bg-primary px-3 py-2 text-white sticky-top" style={{zIndex: 0}}>
               <p className="mb-0">{contacto.name}</p>
               <p className="mb-0">{contacto.email}</p>
-            </React.Fragment>
-          )
-          : (
-            <p className="mb-0">Selecciona un contacto</p>
-          )}
-        </div>
-        <div id="conversacion">
-          {Object.keys(conversacion).map(function(key) {
-              return (
-                <Mensaje mensaje={conversacion[key]} key={conversacion[key].id} usuario={contacto}></Mensaje>
-              )
-          })}
-        </div>
-        {contacto.id
-          ? (
-            <div className="mt-auto">
-              {escribiendo.escribiendo
-              ? (
-                <p className="m-0">{escribiendo.nombre} está escribiendo...</p>
-              )
-              : (null)}
-              <form className="d-flex w-full px-2 pb-1" onSubmit={enviarMensaje}>
-                <input type="hidden" name="_token" value={token}></input>
-                <input type="text" className="form-control mr-1" placeholder="Ingrese su mensaje" value={mensaje} onChange={(e) => handleEscribiendo(e)} />
-                <input type="submit" className="btn btn-primary" value="Enviar" />
-              </form>
             </div>
           )
-          : (null)}
+          : (
+            <p className="mb-0 bg-primary px-3 py-2 text-white sticky-top" style={{zIndex: 0}}>Selecciona un contacto</p>
+          )}
+          <div id="conversacion" className="px-2">
+            {Object.keys(conversacion).map(function(key) {
+                return (
+                  <Mensaje mensaje={conversacion[key]} key={conversacion[key].id} usuario={contacto}></Mensaje>
+                )
+            })}
+          </div>
+        </div>
+        {contacto.id
+            ? (
+              <div className="escribiendo bg-white py-2">
+                {escribiendo.escribiendo
+                ? (
+                  <p className="m-0">{escribiendo.nombre} está escribiendo...</p>
+                )
+                : (null)}
+                <form className="d-flex w-full px-2" onSubmit={enviarMensaje}>
+                  <input type="hidden" name="_token" value={token}></input>
+                  <input type="text" className="form-control mr-1" placeholder="Ingrese su mensaje" value={mensaje} onChange={(e) => handleEscribiendo(e)} />
+                  <input type="submit" className="btn btn-primary" value="Enviar" />
+                </form>
+              </div>
+            )
+            : (null)
+          }
       </div>
     </div>
   );

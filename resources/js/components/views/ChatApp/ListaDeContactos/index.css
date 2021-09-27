@@ -1,3 +1,12 @@
+#lista-de-contactos {
+  overflow-y: scroll;
+  height: 100%;
+}
+
+.contacto {
+  user-select: none;
+}
+
 .contacto-hover:hover {
   background-color: #3753ac;
   color: #ffffff;
